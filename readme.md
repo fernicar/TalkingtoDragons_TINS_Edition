@@ -68,7 +68,7 @@ source venv/bin/activate
 
 3. **Unleash the Dragon:**
    ```bash
-   python ollama_prompt_factory.py
+   python TalkingtoDragons.py
    ```
 
 The GUI will materialise before your very eyes, ready to transform your prompts!
