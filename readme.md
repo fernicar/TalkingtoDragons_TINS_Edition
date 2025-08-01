@@ -28,7 +28,8 @@ Before we unleash this prompt-enhancing dragon, you'll need these mystical ingre
 This application speaks directly to local Ollama models, so you'll need Ollama installed and running:
 
 - Download from [Ollama's official lair](https://ollama.ai/)
-- Install a model (we recommend `gemma3:27b` for best results)
+- Install a model (we recommend `gemma3:27b` 'and mistral-nemo:12b'
+ for best results)
 - Ensure it's running on `http://localhost:11434`
 
 Test your setup:
