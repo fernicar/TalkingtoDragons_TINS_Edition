@@ -1,5 +1,7 @@
 # 🐲 Prompt Writer - Talking to Dragons 🐲
 
+V3 Experimental, should do better camera and lighting based on topic. Also relaxed some of the prompt sizes as Mistral Nemo is a Chav that talks too much!
+
 Welcome, brave digital alchemists and prompt enchanters! Ever felt like your image generation prompts were more like whimpers than roars? Fear not! **Prompt Writer - Talking to Dragons** is here to transform your measly prompt scraps into magnificent, fire-breathing descriptions that'll make even the most stubborn AI dragons sit up and pay attention! ✨
 
 This mystical Tkinter application harnesses the power of local Ollama models to take your basic prompts and enhance them into rich, detailed masterpieces worthy of the finest image generation spells. Say goodbye to bland "cat on beach" prompts and hello to epic 250-300 word sagas!
