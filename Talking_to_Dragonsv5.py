@@ -503,9 +503,10 @@ def on_mode_change():
 # GUI Setup - DRAGON DIFFUSION BRANDING
 root = tk.Tk()
 root.title("Dragon Diffusion - Talking to Dragons")
-root.geometry("1000x800")
+root.geometry("1000x800")  # Reasonable default size
+root.minsize(900, 700)     # Smaller minimum to fit more screens
 
-# Welsh Dragon Colour Scheme
+# Welsh Dragon Colour Scheme - DEFINE BEFORE USE
 BG_BLACK = "#0d0d0d"
 BG_CHARCOAL = "#1a1a1a"
 SCARLET_RED = "#dc143c"
@@ -526,10 +527,33 @@ style.configure('Dragon.TCombobox',
                 bordercolor=RICH_GOLD,
                 arrowcolor=SCARLET_RED)
 
+# Create main canvas with scrollbar for entire window
+main_canvas = tk.Canvas(root, bg=BG_BLACK)
+main_scrollbar = ttk.Scrollbar(root, orient="vertical", command=main_canvas.yview)
+scrollable_frame = tk.Frame(main_canvas, bg=BG_BLACK)
+
+scrollable_frame.bind(
+    "<Configure>",
+    lambda e: main_canvas.configure(scrollregion=main_canvas.bbox("all"))
+)
+
+main_canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+main_canvas.configure(yscrollcommand=main_scrollbar.set)
+
+# Pack canvas and scrollbar
+main_canvas.pack(side="left", fill="both", expand=True)
+main_scrollbar.pack(side="right", fill="y")
+
+# Mouse wheel scrolling
+def _on_mousewheel(event):
+    main_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+
+main_canvas.bind_all("<MouseWheel>", _on_mousewheel)
+
 fetch_ollama_models()
 
 # Title with Dragon Diffusion branding
-title_frame = tk.Frame(root, bg=BG_BLACK)
+title_frame = tk.Frame(scrollable_frame, bg=BG_BLACK)
 title_frame.grid(row=0, column=0, columnspan=2, pady=(15, 25))
 
 title_label = tk.Label(title_frame, text="Dragon Diffusion", 
@@ -548,7 +572,7 @@ tagline_label = tk.Label(title_frame, text="Professional Prompt Enhancement Suit
 tagline_label.pack(pady=(5, 0))
 
 # Mode Selection with Dragon styling
-mode_frame = tk.LabelFrame(root, text="Processing Mode", 
+mode_frame = tk.LabelFrame(scrollable_frame, text="Processing Mode", 
                            font=("Arial", 12, "bold"), 
                            bg=BG_BLACK, fg=RICH_GOLD, 
                            bd=2, relief="ridge")
@@ -576,7 +600,7 @@ generate_radio = tk.Radiobutton(mode_frame, text="Generate New Variations",
 generate_radio.grid(row=0, column=1, padx=20, pady=10, sticky="w")
 
 # Enhancement Mode Frame
-enhance_frame = tk.LabelFrame(root, text="Enhancement Mode", 
+enhance_frame = tk.LabelFrame(scrollable_frame, text="Enhancement Mode", 
                               font=("Arial", 12, "bold"), 
                               bg=BG_BLACK, fg=RICH_GOLD, 
                               bd=2, relief="ridge")
@@ -597,7 +621,7 @@ load_btn = tk.Button(enhance_frame, text="Load Prompt File",
 load_btn.grid(row=1, column=0, padx=10, pady=10)
 
 # Generation Mode Frame
-generate_frame = tk.LabelFrame(root, text="Generation Mode", 
+generate_frame = tk.LabelFrame(scrollable_frame, text="Generation Mode", 
                                font=("Arial", 12, "bold"), 
                                bg=BG_BLACK, fg=RICH_GOLD, 
                                bd=2, relief="ridge")
@@ -624,7 +648,7 @@ count_entry.insert(0, "50")
 count_entry.grid(row=1, column=1, sticky="w", padx=10, pady=10)
 
 # Model Selection with Dragon styling
-model_frame = tk.LabelFrame(root, text="Model Selection", 
+model_frame = tk.LabelFrame(scrollable_frame, text="Model Selection", 
                             font=("Arial", 12, "bold"), 
                             bg=BG_BLACK, fg=RICH_GOLD, 
                             bd=2, relief="ridge")
@@ -642,7 +666,7 @@ model_dropdown = ttk.Combobox(model_frame, textvariable=model_var,
 model_dropdown.grid(row=0, column=1, padx=15, pady=15)
 
 # Control Buttons with Dragon styling
-button_frame = tk.Frame(root, bg=BG_BLACK)
+button_frame = tk.Frame(scrollable_frame, bg=BG_BLACK)
 button_frame.grid(row=4, column=0, columnspan=2, pady=20)
 
 # Main processing buttons
@@ -692,46 +716,46 @@ chinese_note = tk.Label(button_frame, text="↑ Token-efficient Chinese output",
                         font=("Arial", 9, "italic"))
 chinese_note.grid(row=1, column=1, columnspan=2, sticky="w", padx=10, pady=(10, 0))
 
-# Input/Output Area with Dragon styling
-io_frame = tk.Frame(root, bg=BG_BLACK)
-io_frame.grid(row=5, column=0, columnspan=2, sticky="nsew", padx=15, pady=15)
+# Input/Output Area with Dragon styling - SCROLLABLE VERSION
+io_frame = tk.Frame(scrollable_frame, bg=BG_BLACK)
+io_frame.grid(row=5, column=0, columnspan=2, sticky="ew", padx=15, pady=15)
 
-# Input Section
+# Input Section - FIXED HEIGHT
 input_frame = tk.LabelFrame(io_frame, text="Input Prompts", 
                             font=("Arial", 12, "bold"), 
                             bg=BG_BLACK, fg=RICH_GOLD, 
                             bd=2, relief="ridge")
-input_frame.grid(row=0, column=0, sticky="nsew", padx=(0, 8), pady=5)
+input_frame.grid(row=0, column=0, sticky="ew", padx=(0, 8), pady=5)
 
 input_text = scrolledtext.ScrolledText(input_frame, wrap=tk.WORD, 
-                                       width=45, height=18, 
+                                       width=50, height=15, 
                                        bg=BG_CHARCOAL, fg=TEXT_WHITE, 
-                                       font=("Consolas", 10),
+                                       font=("Consolas", 9),
                                        insertbackground=SCARLET_RED,
                                        selectbackground=SCARLET_RED,
                                        selectforeground=TEXT_WHITE,
                                        relief="solid", bd=1)
-input_text.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+input_text.grid(row=0, column=0, sticky="ew", padx=10, pady=10)
 
-# Output Section
+# Output Section - FIXED HEIGHT
 output_frame = tk.LabelFrame(io_frame, text="Enhanced Prompts", 
                              font=("Arial", 12, "bold"), 
                              bg=BG_BLACK, fg=RICH_GOLD, 
                              bd=2, relief="ridge")
-output_frame.grid(row=0, column=1, sticky="nsew", padx=(8, 0), pady=5)
+output_frame.grid(row=0, column=1, sticky="ew", padx=(8, 0), pady=5)
 
 output_text = scrolledtext.ScrolledText(output_frame, wrap=tk.WORD, 
-                                        width=45, height=18, 
+                                        width=50, height=15, 
                                         bg=BG_CHARCOAL, fg=TEXT_WHITE, 
-                                        font=("Consolas", 10),
+                                        font=("Consolas", 9),
                                         insertbackground=SCARLET_RED,
                                         selectbackground=SCARLET_RED,
                                         selectforeground=TEXT_WHITE,
                                         relief="solid", bd=1)
-output_text.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+output_text.grid(row=0, column=0, sticky="ew", padx=10, pady=10)
 
 # Status Area with Dragon styling
-status_frame = tk.LabelFrame(root, text="Status", 
+status_frame = tk.LabelFrame(scrollable_frame, text="Status", 
                              font=("Arial", 12, "bold"), 
                              bg=BG_BLACK, fg=RICH_GOLD, 
                              bd=2, relief="ridge")
@@ -744,20 +768,15 @@ status_text = tk.Text(status_frame, height=3,
                       relief="solid", bd=1)
 status_text.grid(row=0, column=0, sticky="ew", padx=10, pady=10)
 
-# Configure grid weights for responsive design
-root.grid_rowconfigure(5, weight=1)
-root.grid_columnconfigure(0, weight=1)
-root.grid_columnconfigure(1, weight=1)
+# Configure grid weights for the scrollable frame
+scrollable_frame.grid_columnconfigure(0, weight=1)
+scrollable_frame.grid_columnconfigure(1, weight=1)
 
-io_frame.grid_rowconfigure(0, weight=1)
 io_frame.grid_columnconfigure(0, weight=1)
 io_frame.grid_columnconfigure(1, weight=1)
 
-input_frame.grid_rowconfigure(0, weight=1)
 input_frame.grid_columnconfigure(0, weight=1)
-output_frame.grid_rowconfigure(0, weight=1)
 output_frame.grid_columnconfigure(0, weight=1)
-
 status_frame.grid_columnconfigure(0, weight=1)
 
 # Initialize mode
