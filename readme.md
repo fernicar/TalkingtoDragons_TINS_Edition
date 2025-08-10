@@ -114,10 +114,10 @@ source venv/bin/activate
 
 3. **Unleash the Dragon:**
    ```bash
-   python talking_to_dragons_v5.py
+   python main.py
    ```
 
-The professional Welsh dragon-themed GUI will materialise, ready to transform your prompts!
+The new, modern PySide6 GUI will materialize, ready to transform your prompts with enhanced stability and features!
 
 ## 🎯 How to Wield This Magical Tool 🎯
 
