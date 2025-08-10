@@ -34,6 +34,40 @@ Give it a theme ("Lovecraftian horror with tentacles and dread") and it'll spawn
 
 Perfect for multilingual models that understand Chinese but you don't need to speak it - just exploit the linguistic efficiency!
 
+---
+
+## 🚀 **New PySide6 GUI (Under Development)** 🚀
+
+This application is currently undergoing a significant architectural refactor. The original `tkinter`-based GUI is being replaced with a modern, robust, and maintainable interface built with **PySide6 (version 6.9.1)**. This section outlines the new architecture.
+
+### Architectural Principles
+
+The new design is guided by the principle of **Separation of Concerns**, moving away from a single-file script to a modular structure that is easier to manage and extend. It loosely follows a Model-View-Controller (MVC) pattern:
+
+-   **`main.py` (View/Controller)**: The main application entry point, responsible for creating and managing all GUI elements using PySide6 widgets. It handles user interactions and orchestrates calls to the business logic.
+-   **`llm_integration.py` (Model)**: Contains the core business logic. All interactions with the Ollama API—such as fetching models, constructing prompts, and processing requests—are encapsulated here.
+-   **`utils.py` (Utilities)**: A collection of shared helper functions, such as the text-cleaning logic for the LLM output.
+-   **`theme.py` (Styling)**: Holds the custom QSS (Qt Style Sheets) for the "Dragon Diffusion" theme.
+
+### Key PySide6 Features
+
+The new implementation leverages powerful features of the Qt6 framework to create a responsive and feature-rich user experience:
+
+-   **Widget Hierarchy & Layouts**: The UI is built with a clear hierarchy of standard widgets (`QMainWindow`, `QGroupBox`, `QTextEdit`, `QComboBox`, etc.) and organized using flexible layout managers (`QVBoxLayout`, `QHBoxLayout`) to ensure the interface is clean and scales correctly.
+
+-   **Signals and Slots**: We are using Qt's core communication mechanism to decouple components. For example, a button's `clicked` signal is connected to a `@Slot` in the controller, which then calls the business logic. This creates a clean, event-driven architecture.
+
+-   **Asynchronous Operations with `QThread`**: All network requests to the Ollama API will be executed in a background thread (`QThread`). This is crucial for ensuring the GUI remains responsive and does not "freeze" while waiting for the LLM to generate a response. The thread will use signals to send data and progress updates back to the main UI thread safely.
+
+-   **Dynamic Theming Engine**: The new GUI features a flexible theming system:
+    -   **`QStyleFactory`**: Users can switch between native-looking application styles like "Fusion", "Windows", and "macOS". "Fusion" is used as the default for a consistent cross-platform look.
+    -   **Color Schemes**: Full support for light and dark modes by manipulating the `Qt.ColorScheme`.
+    -   **Custom QSS**: The original "Welsh Dragon" theme is implemented as a custom stylesheet (`.qss`) that can be applied on top of any style, demonstrating the full power of Qt's styling capabilities.
+
+-   **Modern Idioms**: The new codebase adheres to modern PySide6 best practices, including the use of **scoped enums** (e.g., `Qt.AlignmentFlag.AlignHCenter`) for improved readability and type safety, and Pythonic decorators (`@Slot`, `@Property`) for defining Qt behavior.
+
+---
+
 ## 🧙‍♂️ Prerequisites - Gathering Your Magical Components 🧙‍♀️
 
 ### 1. Ollama - The Dragon's Brain 🧠
