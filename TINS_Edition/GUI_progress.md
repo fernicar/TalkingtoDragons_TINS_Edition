@@ -66,8 +66,21 @@ This plan outlines the tasks required to refactor the `tkinter`-based "Talking t
     - [ ] Modify the processing loops (`process_prompts`, `process_chinese_prompts`) to be non-blocking or run in a separate thread (`QThread`) to keep the GUI responsive. They should emit signals to update the UI with progress and results.
 - [ ] **Status Updates**: Implement a mechanism (e.g., a custom signal) to update the status label from the business logic threads.
 
-## VI. Theming and Finalization
+## VI. Theme Selection Menu
 
-- [ ] **Dragon Theme**: Create a QSS stylesheet in `theme.py` that replicates the "Welsh Dragon Colour Scheme" from the original app (dark background, red/gold highlights) and apply it to the application.
-- [ ] **Final Review**: Ensure all widgets are styled correctly, layouts are balanced, and the application is responsive.
+- [ ] **Menu Bar**: Add a `QMenuBar` to the `QMainWindow`.
+- [ ] **Theme Menu**: Create a "Theme" menu in the menu bar.
+- [ ] **Style Options**:
+    - [ ] Add actions to the menu to switch between `QStyleFactory` themes (e.g., "Fusion", "Windows", "macOS").
+    - [ ] Set "Fusion" as the default style.
+- [ ] **Color Scheme**:
+    - [ ] Add a submenu for color schemes, including an "Auto" option that uses system colors.
+    - [ ] Add an option for the custom "Dragon Diffusion" theme.
+- [ ] **Custom Theme Logic**:
+    - [ ] The "Dragon Diffusion" theme will load a custom QSS stylesheet from `theme.py`.
+    - [ ] All other themes will use the standard PySide6 styling.
+
+## VII. Finalization
+
+- [ ] **Final Review**: Ensure all widgets are styled correctly, themes apply properly, layouts are balanced, and the application is responsive.
 - [ ] **README Update**: Update the root `README.md` with instructions on how to install and run the new PySide6 application.
